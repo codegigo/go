@@ -1590,12 +1590,10 @@ namespace GigoWorkshop {
 
 
 
+    //แก้สีแล้ว
     ////////////////////////////////
-    //          Colour sensor       //
+    //          Color sensor     //
     ////////////////////////////////
-
-
-
 
     // Initialize the color sensor
     export function colorSensorInit(): void {
@@ -1661,6 +1659,107 @@ namespace GigoWorkshop {
 
         return (red == WriteRed && green == WriteGreen && blue == WriteBlue);
     }
+
+
+    // Function to check if the color matches exactly with a list of known RGB values
+    function isExactMatch(R: number, G: number, B: number, exactValues: number[][]): boolean {
+        return exactValues.some(color => color[0] === R && color[1] === G && color[2] === B);
+    }
+
+    // Enum for color options
+    export enum ColorOptions {
+        Red,
+        Black,
+        Blue,
+        Green,
+        Yellow,
+        White
+    }
+
+    // Data for exact matches (based on the information you provided)
+    const redExactValues = [
+        [184, 185, 140], [185, 185, 140], [191, 187, 141], [197, 190, 142], [183, 185, 140], [184, 188, 141],
+        [177, 178, 135], [177, 176, 133], [177, 180, 135], [195, 185, 138], [190, 180, 136],
+        [177, 180, 136], [177, 178, 135], [177, 176, 133], [177, 180, 135], [195, 185, 138], [190, 180, 136],
+        [177, 180, 136]
+    ];
+
+
+    const blackExactValues = [
+        [153, 180, 135], [155, 182, 136], [153, 179, 135], [155, 181, 135], [154, 179, 134], [156, 182, 136], [154, 180, 134], [157, 183, 136]
+    ];
+
+    const blueExactValues = [
+        [159, 187, 144], [162, 196, 154], [209, 250, 186], [160, 202, 163], [159, 196, 157],
+        [158, 195, 156], [158, 187, 144], [159, 198, 157], [160, 201, 162]
+    ];
+
+
+    const greenExactValues = [
+        [164, 201, 145], [163, 200, 145], [160, 197, 144], [161, 198, 144], [171, 207, 148],
+        [187, 219, 150], [168, 205, 147], [176, 212, 149]
+    ];
+
+    const yellowExactValues = [
+        [210, 227, 149], [210, 226, 148], [213, 215, 148], [231, 225, 151], [241, 246, 155], [226, 244, 154],
+        [219, 236, 152], [243, 251, 157], [232, 232, 152], [202, 218, 144], [203, 219, 143],
+        [200, 203, 141], [225, 218, 146], [214, 208, 143], [219, 216, 145]
+    ];
+
+    const whiteExactValues = [
+        [8, 27, 198], [14, 30, 196], [1, 19, 193], [1, 19, 194], [15, 30, 197], [2, 21, 195], [9, 27, 199],
+        [254, 17, 192], [253, 17, 192], [3, 23, 197], [0, 20, 194], [252, 16, 193], [0, 18, 193]
+    ];
+
+    // Function to check if the color is within a specified range
+    function isColorInRange(R: number, G: number, B: number, RMin: number, RMax: number, GMin: number, GMax: number, BMin: number, BMax: number): boolean {
+        return (R >= RMin && R <= RMax && G >= GMin && G <= GMax && B >= BMin && B <= BMax);
+    }
+
+    // Function to check the selected color with exact match comparison or range
+    //% block="Check color %color"
+    //% group="Color Sensor"
+    export function checkColor(color: ColorOptions): boolean {
+        colorSensorInit();
+        let colors = colorSensorReadNow();
+        let red = colors[0];
+        let green = colors[1];
+        let blue = colors[2];
+
+        switch (color) {
+            case ColorOptions.Red:
+                if (isExactMatch(red, green, blue, redExactValues)) {
+                    return true;
+                }
+                return isColorInRange(red, green, blue, 177, 200, 176, 190, 133, 142);
+            case ColorOptions.Black:
+                if (isExactMatch(red, green, blue, blackExactValues)) {
+                    return true;
+                }
+                return isColorInRange(red, green, blue, 150, 160, 175, 185, 130, 140);
+            case ColorOptions.Blue:
+                return isExactMatch(red, green, blue, blueExactValues);
+
+            //return isColorInRange(red, green, blue, 155, 210, 185, 255, 140, 165);
+            case ColorOptions.Green:
+                return isExactMatch(red, green, blue, greenExactValues);
+
+            //return  isColorInRange(red, green, blue, 160, 215, 195, 250, 140, 160);
+            case ColorOptions.Yellow:
+                if (isExactMatch(red, green, blue, yellowExactValues)) {
+                    return true;
+                }
+                return isColorInRange(red, green, blue, 200, 245, 200, 255, 140, 160);
+            case ColorOptions.White:
+                if (isExactMatch(red, green, blue, whiteExactValues)) {
+                    return true;
+                }
+                return isColorInRange(red, green, blue, 0, 255, 0, 255, 190, 200);
+            default:
+                return false;
+        }
+    }
+
 
 
 }
