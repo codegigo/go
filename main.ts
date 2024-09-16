@@ -1,6 +1,6 @@
+
 //% color=#0031AF icon="\uf06e" 
 //% groups='["Basic", "Ball", "Face", "Card", "Color", "Tracking", "Learn"]'
-//% block="AI-Lens"
 namespace AILens {
     const CameraAdd = 0X14;
     let DataBuff = pins.createBuffer(9);
@@ -10,11 +10,11 @@ namespace AILens {
     export enum FuncList {
         //% block="Card recognition"
         Card = 2,
-        //% block="Face detection"
+        //% block="Face detection" 
         Face = 6,
         //% block="Ball recognition"
         Ball = 7,
-        //% block="Tracking recognition"
+        //% block="Tracking line"
         Tracking = 8,
         //% block="Color recognition"
         Color = 9,
@@ -222,7 +222,7 @@ namespace AILens {
         //% block="Blue"
         Blue = 1
     }
-    /////////ASR
+
     export enum vocabularyList {
         //% block="Hi, Shaun"
         Hi_Shaun = 1,
@@ -290,7 +290,7 @@ namespace AILens {
     /**
     * TODO: Waiting for module initialize.
     */
-    //% block="Start AI-Lens"
+    //% block="Initialize AI-Lens"
     //% group="Basic" weight=100 
     //% color=#00B1ED
     export function initModule(): void {
@@ -342,7 +342,7 @@ namespace AILens {
     //% block="Image contains %ballcolor ball"
     //% group="Ball" weight=84
     //% ballcolor.fieldEditor="gridpicker"
-    //% ballcolor.fieldOptions.columns=2 
+    //% ballcolor.fieldOptions.columns=2
     //% color=#00B1ED
     export function ballColor(ballcolor: ballColorList): boolean {
         if (DataBuff[0] == 7) {
@@ -496,7 +496,7 @@ namespace AILens {
     //% block="Image contains traffic card(s): %status"
     //% status.fieldEditor="gridpicker"
     //% status.fieldOptions.columns=3
-    //% group="Card" weight=55
+    //% group="Card" weight=55 
     //% color=#00B1ED
     export function trafficCard(status: trafficCards): boolean {
         if (DataBuff[0] == 3) {
@@ -512,7 +512,7 @@ namespace AILens {
     //% block="Image contains other card(s): %status"
     //% status.fieldEditor="gridpicker"
     //% status.fieldOptions.columns=3
-    //% group="Card"
+    //% group="Card" 
     //% color=#00B1ED
     export function otherCard(status: otherCards): boolean {
         if (DataBuff[0] == 3) {
@@ -573,7 +573,7 @@ namespace AILens {
     //% block="Image contains color card(s): %status"
     //% status.fieldEditor="gridpicker"
     //% status.fieldOptions.columns=3
-    //% group="Color" weight=30 
+    //% group="Color" weight=30
     //% color=#00B1ED
     export function colorCheck(status: ColorLs): boolean {
         if (DataBuff[0] == 9) {
@@ -636,7 +636,7 @@ namespace AILens {
     //% status.fieldEditor="gridpicker"
     //% status.fieldOptions.columns=3
     //% group="Tracking"
-    //% weight=35
+    //% weight=35 
     //% color=#00B1ED
     export function lineData(status: Linestatus): number {
         if (DataBuff[0] == 8) {
@@ -770,30 +770,7 @@ namespace AILens {
         }
         return 0
     }
-    let asrEventId = 3500
-    let lastvoc = 0
 
-    export function onASR(vocabulary: vocabularyList, handler: () => void) {
-        control.onEvent(asrEventId, vocabulary, handler);
-        control.inBackground(() => {
-            while (true) {
-                const voc = pins.i2cReadNumber(0x0B, 1)
-                if (voc != lastvoc) {
-                    lastvoc = voc
-                    control.raiseEvent(asrEventId, lastvoc);
-                }
-                basic.pause(50);
-            }
-        })
-    }
-
-    export function setASRLearn(): void {
-        pins.i2cWriteNumber(0x0B, 0x50, NumberFormat.Int8LE)
-    }
-
-    export function delASRLearn(): void {
-        pins.i2cWriteNumber(0x0B, 0x60, NumberFormat.Int8LE)
-    }
 }
 
 //--------------------
