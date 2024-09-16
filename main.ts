@@ -1,6 +1,7 @@
 
 //% color=#0031AF icon="\uf06e" 
 //% groups='["Basic", "Ball", "Face", "Card", "Color", "Tracking", "Learn"]'
+//% block="AILens"
 namespace AILens {
     const CameraAdd = 0X14;
     let DataBuff = pins.createBuffer(9);
