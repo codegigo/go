@@ -11,11 +11,11 @@ namespace AILens {
     export enum FuncList {
         //% block="Card recognition"
         Card = 2,
-        //% block="Face recognition" 
+        //% block="Face detection" 
         Face = 6,
         //% block="Ball recognition"
         Ball = 7,
-        //% block="Tracking recognition"
+        //% block="Tracking line"
         Tracking = 8,
         //% block="Color recognition"
         Color = 9,
